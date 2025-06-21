@@ -109,7 +109,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // ✅ Final version — no duplicate calls
   const typingText = document.getElementById("typing-text");
   const phrases = [
-    "Enthusiastic B.Tech CSE-IoT student",
+    "B.Tech CSE-IoT Student",
     "Web Developer",
     "AI Enthusiast",
     "IoT Explorer"
