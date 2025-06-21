@@ -236,21 +236,21 @@
 
     <!-- Custom Modal Carousel -->
     <div id="carouselModal" class="carousel-modal">
-        <div class="carousel-overlay" onclick="closeCarousel()"></div>
         <div class="carousel-box">
-            <span class="close-carousel" onclick="closeCarousel()">×</span>
-
-            <!--  This is the dynamic heading -->
-            <h2 class="carousel-title text-center mb-3">Certificates</h2>
-
-            <div class="carousel-track" id="carousel-track">
-                <!-- Slides inserted dynamically -->
+            <div class="carousel-header">
+                <h2 class="carousel-title">Certificates</h2>
+                <span class="close-carousel" onclick="closeCarousel()">×</span>
             </div>
-
+            <div class="carousel-content">
+                <div class="carousel-track" id="carousel-track">
+                    <!-- Slides injected by JS -->
+                </div>
+            </div>
             <button class="carousel-nav prev" onclick="moveSlide(-1)">‹</button>
             <button class="carousel-nav next" onclick="moveSlide(1)">›</button>
         </div>
     </div>
+
 
 
     <!-- RESUME -->

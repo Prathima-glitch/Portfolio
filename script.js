@@ -227,6 +227,8 @@ window.addEventListener("load", function () {
 
 //FOR CAROUSEL 
 
+// Fixing carousel to show all items in same category with clean layout and navigation
+
 function openCarousel(category, clickedCard = null) {
   const track = document.getElementById('carousel-track');
   const modal = document.getElementById('carouselModal');
@@ -282,7 +284,6 @@ function openCarousel(category, clickedCard = null) {
   modal.style.display = 'flex';
   requestAnimationFrame(() => updateCarousel());
 
-  // Attach the click-outside listener only when modal opens
   setTimeout(() => {
     document.addEventListener("click", handleClickOutsideCarousel);
   }, 0);
@@ -302,12 +303,6 @@ function handleClickOutsideCarousel(e) {
   }
 }
 
-
-
-
-
-
-
 function updateCarousel() {
   const track = document.getElementById('carousel-track');
   const slides = Array.from(track.children);
@@ -320,7 +315,6 @@ function updateCarousel() {
   });
 }
 
-
 function moveSlide(direction) {
   const track = document.getElementById('carousel-track');
   const slides = track.children;
@@ -328,13 +322,8 @@ function moveSlide(direction) {
   updateCarousel();
 }
 
-
-
-
-// Attach click listener to all cert-cards
 document.querySelectorAll('.cert-card').forEach(card => {
   card.addEventListener('click', () => {
     openCarousel(currentFilter, card);
   });
 });
-
