@@ -5,30 +5,32 @@ document.addEventListener("DOMContentLoaded", () => {
   const sections = document.querySelectorAll("section");
   const navLinks = document.querySelectorAll(".nav-links a");
   const darkToggle = document.getElementById("darkToggle");
+  const navMenu = document.getElementById("navMenu");
+  const navLinkElements = document.querySelectorAll("#navMenu a");
+
   const body = document.body;
 
   // === ScrollSpy Navigation ===
   const updateActiveLink = () => {
+    const scrollY = window.scrollY;
+    const sections = document.querySelectorAll("section");
 
-    const scrollY = window.pageYOffset;
-
-    let current = "";
-    let maxVisible = 0;
+    let currentSection = null;
+    let maxVisibleHeight = 0;
 
     sections.forEach(section => {
       const rect = section.getBoundingClientRect();
-      const visible = Math.max(0, window.innerHeight - Math.abs(rect.top));
+      const visibleHeight = Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0);
 
-      if (visible > maxVisible) {
-        maxVisible = visible;
-        current = section.getAttribute("id");
+      if (visibleHeight > maxVisibleHeight && visibleHeight > 100) { // ensures real visibility
+        maxVisibleHeight = visibleHeight;
+        currentSection = section.getAttribute("id");
       }
     });
 
-
-    navLinks.forEach(link => {
+    document.querySelectorAll(".nav-links a").forEach(link => {
       link.classList.remove("active");
-      if (link.getAttribute("href").includes(current)) {
+      if (currentSection && link.getAttribute("href").includes(currentSection)) {
         link.classList.add("active");
       }
     });
@@ -77,7 +79,34 @@ document.addEventListener("DOMContentLoaded", () => {
   updateActiveLink();
   revealSections();
 
+  // Hamburger Toggle
+  const hamburger = document.getElementById("hamburger");
+
+  hamburger.addEventListener("click", () => {
+    navMenu.classList.toggle("active");
+  });
+
+  // Close menu when clicking outside
+  document.addEventListener("click", (event) => {
+    const isClickInsideMenu = navMenu.contains(event.target);
+    const isClickOnHamburger = hamburger.contains(event.target);
+
+    if (!isClickInsideMenu && !isClickOnHamburger) {
+      navMenu.classList.remove("active");
+    }
+  });
+
+  // Collapse when any link is clicked (optional)
+  navLinkElements.forEach(link => {
+    link.addEventListener('click', () => {
+      navMenu.classList.remove('active');
+    });
+  });
+
+
+
   // === Typing Animation ===
+  // ✅ Final version — no duplicate calls
   const typingText = document.getElementById("typing-text");
   const phrases = [
     "Enthusiastic B.Tech CSE-IoT student",
@@ -91,30 +120,33 @@ document.addEventListener("DOMContentLoaded", () => {
   let isDeleting = false;
   let currentText = "";
 
-  function typeEffect() {
-    const currentPhrase = phrases[phraseIndex];
+  if (typingText) {
+    function typeEffect() {
+      const currentPhrase = phrases[phraseIndex];
 
-    if (isDeleting) {
-      currentText = currentPhrase.substring(0, letterIndex--);
-    } else {
-      currentText = currentPhrase.substring(0, letterIndex++);
+      if (isDeleting) {
+        currentText = currentPhrase.substring(0, letterIndex--);
+      } else {
+        currentText = currentPhrase.substring(0, letterIndex++);
+      }
+
+      typingText.textContent = currentText;
+
+      if (!isDeleting && letterIndex === currentPhrase.length + 1) {
+        isDeleting = true;
+        setTimeout(typeEffect, 1000);
+      } else if (isDeleting && letterIndex === 0) {
+        isDeleting = false;
+        phraseIndex = (phraseIndex + 1) % phrases.length;
+        setTimeout(typeEffect, 300);
+      } else {
+        setTimeout(typeEffect, isDeleting ? 60 : 100);
+      }
     }
 
-    typingText.textContent = currentText;
-
-    if (!isDeleting && letterIndex === currentPhrase.length + 1) {
-      isDeleting = true;
-      setTimeout(typeEffect, 1000);
-    } else if (isDeleting && letterIndex === 0) {
-      isDeleting = false;
-      phraseIndex = (phraseIndex + 1) % phrases.length;
-      setTimeout(typeEffect, 300);
-    } else {
-      setTimeout(typeEffect, isDeleting ? 60 : 100);
-    }
+    typeEffect(); // ✅ this is the only call you need
   }
 
-  typeEffect();
 
   // === Modal Logic ===
   window.openModal = function () {
@@ -199,7 +231,6 @@ function openCarousel(category, clickedCard = null) {
   const track = document.getElementById('carousel-track');
   const modal = document.getElementById('carouselModal');
   const titleEl = document.querySelector('.carousel-title');
-
   const allCerts = Array.from(document.querySelectorAll('.cert-card'));
 
   const filtered = category === 'all'
@@ -224,34 +255,26 @@ function openCarousel(category, clickedCard = null) {
 
     let titleHTML = `<p class="fw-bold">${title}</p>`;
 
-    // Check if it's the "Professional Skills" cert
     if (card.getAttribute('data-id') === 'Professional_skills_ibm') {
-      const badgeURL = 'https://www.credly.com/badges/53c9bdd6-361b-4465-8799-1af16dbe251d'; // replace this
-      titleHTML = `
-    <p class="fw-bold">
-      ${title} – <a href="${badgeURL}" target="_blank" style="color: var(--accent); text-decoration: underline;">View Badge</a>
-    </p>
-  `;
+      const badgeURL = 'https://www.credly.com/badges/53c9bdd6-361b-4465-8799-1af16dbe251d';
+      titleHTML = `<p class="fw-bold">${title} – <a href="${badgeURL}" target="_blank" style="color: var(--accent); text-decoration: underline;">View Badge</a></p>`;
     }
 
-        if (card.getAttribute('data-id') === 'Job_essentials_ibm') {
-      const badgeURL = 'https://www.credly.com/badges/25cc473c-c404-4a72-a19b-8813114d9686/public_url'; // replace this
-      titleHTML = `
-    <p class="fw-bold">
-      ${title} – <a href="${badgeURL}" target="_blank" style="color: var(--accent); text-decoration: underline;">View Badge</a>
-    </p>
-  `;
+    if (card.getAttribute('data-id') === 'Job_essentials_ibm') {
+      const badgeURL = 'https://www.credly.com/badges/25cc473c-c404-4a72-a19b-8813114d9686/public_url';
+      titleHTML = `<p class="fw-bold">${title} – <a href="${badgeURL}" target="_blank" style="color: var(--accent); text-decoration: underline;">View Badge</a></p>`;
     }
 
     slide.innerHTML = `
-  <img src="${img}" alt="${title}">
-  ${titleHTML}
-  <p style="color: var(--accent);">${company}</p>
-`;
+      <img src="${img}" alt="${title}">
+      ${titleHTML}
+      <p style="color: var(--accent);">${company}</p>
+    `;
 
     if (card.getAttribute('data-id') === clickedId) {
       matchedIndex = i;
     }
+
     track.appendChild(slide);
   });
 
@@ -259,15 +282,31 @@ function openCarousel(category, clickedCard = null) {
   modal.style.display = 'flex';
   requestAnimationFrame(() => updateCarousel());
 
+  // Attach the click-outside listener only when modal opens
+  setTimeout(() => {
+    document.addEventListener("click", handleClickOutsideCarousel);
+  }, 0);
 }
-
-
-
-
 
 function closeCarousel() {
   document.getElementById('carouselModal').style.display = 'none';
+  document.removeEventListener("click", handleClickOutsideCarousel);
 }
+
+function handleClickOutsideCarousel(e) {
+  const modal = document.getElementById("carouselModal");
+  const box = document.querySelector(".carousel-box");
+
+  if (modal.style.display === "flex" && !box.contains(e.target)) {
+    closeCarousel();
+  }
+}
+
+
+
+
+
+
 
 function updateCarousel() {
   const track = document.getElementById('carousel-track');

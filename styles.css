@@ -31,6 +31,7 @@ body.dark .modal-content {
   box-sizing: border-box;
 }
 
+
 body {
   font-family: 'Poppins', sans-serif;
   background: var(--bg-color);
@@ -66,7 +67,7 @@ html {
   padding: 15px 20px;
 }
 
-.logo a{
+.logo a {
   font-weight: 700;
   color: var(--accent);
   font-size: 1.5rem;
@@ -76,6 +77,11 @@ html {
   list-style: none;
   display: flex;
   gap: 20px;
+}
+
+.nav-icons {
+  display: flex;
+  gap: 10px;
 }
 
 .nav-links a {
@@ -92,6 +98,47 @@ html {
   border-bottom: 2px solid var(--accent);
 }
 
+.hamburger {
+  display: none;
+  font-size: 1.8rem;
+  background: none;
+  border: none;
+  color: var(--text-color);
+  cursor: pointer;
+}
+
+/* Default nav-links layout for desktop */
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .hamburger {
+    display: block;
+  }
+
+  .nav-links {
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    background: var(--card-bg);
+    box-shadow: var(--shadow-light);
+    flex-direction: row;
+    padding: 10px 20px;
+    border-radius: 8px;
+    display: none;
+    gap: 20pxpx;
+    z-index: 1000;
+    flex-wrap: wrap;
+  }
+
+  .nav-links.active {
+    display: flex;
+  }
+}
+
 .dark-toggle {
   background: none;
   border: none;
@@ -106,14 +153,23 @@ html {
   color: white;
   text-align: center;
   position: relative;
+  background-position: left center;
 }
 
 .hero::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5); /* dark overlay for contrast */
+  background: rgba(0, 0, 0, 0.5);
+  /* dark overlay for contrast */
   z-index: 1;
+}
+
+@media (max-width: 768px) {
+  .hero {
+    background-position: 20% center;
+    /* Slight tweak for portrait visibility */
+  }
 }
 
 .hero-content {
@@ -224,13 +280,15 @@ body.dark .domain-box {
   box-shadow: var(--shadow-light);
   transition: transform 0.3s;
   text-align: center;
-  color: var(--text-color); /*  only for text now */
+  color: var(--text-color);
+  /*  only for text now */
 }
 
 .skills-grid div i {
   font-size: 2rem;
   margin-bottom: 10px;
-  color: var(--accent); /*  icon remains accent */
+  color: var(--accent);
+  /*  icon remains accent */
 }
 
 
@@ -355,6 +413,47 @@ body.dark .skills-grid div {
   z-index: 2;
 }
 
+@media (max-width: 600px) {
+  .carousel-modal {
+    align-items: flex-start;
+    padding: 0;
+  }
+
+  .carousel-box {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    max-height: none;
+    border-radius: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .carousel-header {
+    position: sticky;
+    top: 0;
+    background: var(--card-bg);
+    z-index: 2;
+    padding: 16px;
+    text-align: center;
+    border-bottom: 1px solid #ccc;
+  }
+
+  .carousel-track-wrapper {
+    overflow-y: auto;
+    flex: 1;
+    padding: 20px;
+  }
+
+  .close-carousel {
+    position: absolute;
+    top: 10px;
+    right: 16px;
+    font-size: 1.8rem;
+    z-index: 3;
+  }
+}
 
 #contact a {
   color: var(--accent);

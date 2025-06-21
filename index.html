@@ -20,8 +20,9 @@
     <header class="navbar">
         <div class="container">
             <h1 class="logo"><a href="#GP">GP</a></h1>
-            <nav>
-                <ul class="nav-links">
+
+            <nav class="mobile-nav">
+                <ul class="nav-links" id="navMenu">
                     <li><a href="#about">About</a></li>
                     <li><a href="#education">Education</a></li>
                     <li><a href="#skills">Skills</a></li>
@@ -29,14 +30,19 @@
                     <li><a href="#certifications">Certifications</a></li>
                     <li><a href="#resume">Resume</a></li>
                     <li><a href="#contact">Contact</a></li>
-
                 </ul>
             </nav>
-            <button class="dark-toggle" id="darkToggle" aria-label="Toggle dark mode">
-                <i class="fas fa-moon"></i>
-            </button>
+
+            <!-- Wrap BOTH icons together -->
+            <div class="nav-icons">
+                <button class="dark-toggle" id="darkToggle" aria-label="Toggle dark mode">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="hamburger" id="hamburger">&#9776;</button>
+            </div>
         </div>
     </header>
+
 
     <!-- HERO SECTION -->
     <section class="hero" id="GP">
