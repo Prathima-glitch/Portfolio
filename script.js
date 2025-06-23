@@ -327,3 +327,41 @@ document.querySelectorAll('.cert-card').forEach(card => {
     openCarousel(currentFilter, card);
   });
 });
+
+document.querySelectorAll('.timeline-click').forEach(item => {
+  item.addEventListener('click', () => {
+    const panel = item.nextElementSibling;
+    panel.classList.toggle('active');
+  });
+});
+
+document.querySelectorAll('.verify-btn').forEach(button => {
+  button.addEventListener('click', () => {
+    const cert = button.nextElementSibling;
+    cert.classList.toggle('hidden');
+  });
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  const certImg = document.querySelector(".zoomable-certificate");
+
+  certImg.addEventListener("click", () => {
+    const modal = document.createElement("div");
+    modal.classList.add("cert-modal");
+
+    modal.innerHTML = `
+      <img src="${certImg.src}" alt="Zoomed Certificate">
+    `;
+
+    document.body.appendChild(modal);
+    modal.style.display = "flex";
+
+    // Close on outside or ✖ click
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal || e.target.tagName === "IMG" || e.target.tagName === "DIV") {
+        modal.remove();
+      }
+    });
+  });
+});
+
